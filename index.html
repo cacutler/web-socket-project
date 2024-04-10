@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Websocket Assignment</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="app">
+            <h1>Chess</h1>
+            <div v-for="rowIndex in boardState">
+                <div v-for="colIndex in rowIndex" class="title" v-on:click="move(rowIndex, colIndex)">{{colIndex}}</div>
+            </div>
+        </div>
+    </body>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</html>
