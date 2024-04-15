@@ -2,8 +2,6 @@ Vue.createApp({
     data: function () {
         return {
             boardState: [],
-            xPosition: "",
-            yPosition: "",
             playerID: Math.floor(Math.random() * 10),
             socket: null,
             black: false,
@@ -14,7 +12,6 @@ Vue.createApp({
     methods: {
         move: function (row, col) {
             if (this.piece !== "") {
-                console.log(row, col);
                 var message = {
                     action: "move",
                     position: [row, col],
@@ -32,8 +29,14 @@ Vue.createApp({
                     this.white = true;
                 }
             } else if (this.piece === "") {
-                this.piece = this.board[row][col];
-                this.board[row][col] = "";
+                var temp_board = JSON.parse(JSON.stringify(this.boardState));
+                this.piece = temp_board[row][col];
+                temp_board[row][col] = "";
+                this.boardState = temp_board;
+                var message = {
+                    action: "pickup",
+                    position: [row, col]
+                };
             }
         },
         sendMessage: function (data) {
@@ -51,7 +54,6 @@ Vue.createApp({
     created: function () {
         this.socket = new WebSocket("ws://localhost:8080");
         this.socket.onmessage = (event) => {
-            console.log("event data:", event.data);
             this.receiveMessage(JSON.parse(event.data));
         };
         if (this.playerID % 2 === 1) {

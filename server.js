@@ -16,21 +16,21 @@ function sendActionToAllClients(actionObject) {
     })
 }
 wss.on("connection", function (ws) {
-    console.log("ws connection:", ws)
     ws.on("error", function (error) {
         console.error("connection error:", error)
     })
     myClients.push(ws)
-    console.log("my client list:", myClients);
     sendActionToAllClients({
         action: "updateBoard",
         board: board
     })
     ws.on("message", function (data, isBinary) {
-        console.log("data:", data);
         var message = JSON.parse(data)
         if (message.action === "move") {
             board[message.position[0]][message.position[1]] = message.piece
+        }
+        if (message.action === "pickup") {
+            board[message.position[0]][message.position[1]] = ""
         }
         sendActionToAllClients({
             action: "updateBoard",
