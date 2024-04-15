@@ -54,7 +54,7 @@ Vue.createApp({
             console.log("event data:", event.data);
             this.receiveMessage(JSON.parse(event.data));
         };
-        if (this.playerID % 2 === 0) {
+        if (this.playerID % 2 === 1) {
             this.white = true;
             this.black = false;
         } else {
