@@ -8,7 +8,7 @@
         <div id="app">
             <h1>Chess</h1>
             <div v-for="rowIndex in boardState">
-                <div v-for="colIndex in rowIndex" class="title" v-on:click="move(rowIndex, colIndex)">{{colIndex}}</div>
+                <div v-for="colIndex in rowIndex" class="tile" v-on:click="move(rowIndex, colIndex)">{{colIndex}}</div>
             </div>
         </div>
     </body>
