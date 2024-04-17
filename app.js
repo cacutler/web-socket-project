@@ -37,6 +37,7 @@ Vue.createApp({
                     action: "pickup",
                     position: [row, col]
                 };
+                this.sendMessage(message);
             }
         },
         sendMessage: function (data) {
