@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const WebSocket = require("ws")
+app.use(express.static("public"))
 var myClients = [];
 var server = app.listen(8080, function () {
     console.log("Server is running...")
@@ -24,6 +25,24 @@ wss.on("connection", function (ws) {
         action: "updateBoard",
         board: board
     })
+    if (myClients.length > 2) {
+        ws.close()
+    }
+    var message = ""
+    var players = []
+    if (myClients.length === 1) {
+        message = "player 1 connected"
+        players = ["player 1"]
+    }
+    if (myClients.length === 2) {
+        message = "player 2 connected"
+        players = ["player 1", "player 2"]
+    }
+    sendActionToAllClients({
+        connection_message: message,
+        action: "connect",
+        players: players
+    })
     ws.on("message", function (data, isBinary) {
         var message = JSON.parse(data)
         if (message.action === "move") {
@@ -32,9 +51,11 @@ wss.on("connection", function (ws) {
         if (message.action === "pickup") {
             board[message.position[0]][message.position[1]] = ""
         }
+        console.log(message);
         sendActionToAllClients({
             action: "updateBoard",
-            board: board
+            board: board,
+            current_player: message.current_player
         })
     })
 })

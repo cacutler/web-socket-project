@@ -2,11 +2,12 @@ Vue.createApp({
     data: function () {
         return {
             boardState: [],
-            playerID: Math.floor(Math.random() * 10),
+            player: {turnType: ""},
             socket: null,
-            black: false,
-            white: false,
-            piece: ""
+            piece: "",
+            turn: "white",
+            players: [],
+            currentPlayer: "player 1"
         };
     },
     methods: {
@@ -15,18 +16,17 @@ Vue.createApp({
                 var message = {
                     action: "move",
                     position: [row, col],
-                    player: this.playerID,
-                    white: this.white,
-                    black: this.black,
                     piece: this.piece
                 };
+                this.piece = "";
+                console.log("move message:", message);
                 this.sendMessage(message);
                 if (this.white) {
-                    this.white = false;
-                    this.black = true;
+                    this.turn = "black";
+                    this.current_player = "player 2";
                 } else {
-                    this.black = false;
-                    this.white = true;
+                    this.turn = "white";
+                    this.current_player = "player 1";
                 }
             } else if (this.piece === "") {
                 var temp_board = JSON.parse(JSON.stringify(this.boardState));
@@ -37,32 +37,36 @@ Vue.createApp({
                     action: "pickup",
                     position: [row, col]
                 };
+                console.log("Pickup message:", message);
                 this.sendMessage(message);
             }
         },
         sendMessage: function (data) {
-            //handle new incoming WS message
             this.socket.send(JSON.stringify(data));
         },
         receiveMessage: function (data) {
-            //send message to WS server
-            if (data.action == "updateBoard") {
-                //do something for some action
+            if (data.action === "updateBoard") {
+                console.log("updated board message:", data);
                 this.boardState = data.board;
+                this.current_player = data.current_player;
             }
+            if (data.action === "connect") {
+                console.log("connect message:", data);
+                if (data.connection_message === "player 1 connected") {
+                    this.players = data.players
+                }
+                if (data.connection_message === "player 2 connected") {
+                    this.players = data.players
+                }
+            }
+            console.log("players:", this.players);
         }
     },
     created: function () {
         this.socket = new WebSocket("ws://localhost:8080");
         this.socket.onmessage = (event) => {
+            console.log("event player data:", event.data);
             this.receiveMessage(JSON.parse(event.data));
         };
-        if (this.playerID % 2 === 1) {
-            this.white = true;
-            this.black = false;
-        } else {
-            this.white = false;
-            this.black = true;
-        }
     }
 }).mount("#app");

@@ -7,9 +7,12 @@
     <body>
         <div id="app">
             <h1>Chess</h1>
-            <div v-for="(row, rowIndex) in boardState">
-                <div v-for="(col, colIndex) in row" class="tile">
-                    <button class="tile" v-on:click="move(rowIndex, colIndex)">{{col}}</button>
+            <h2>It is {{currentPlayer}}'s turn.</h2>
+            <div class="container">
+                <div v-for="(row, rowIndex) in boardState" class="row">
+                    <div v-for="(col, colIndex) in row">
+                        <button class="tile" v-on:click="move(rowIndex, colIndex)">{{col}}</button>
+                    </div>
                 </div>
             </div>
         </div>
