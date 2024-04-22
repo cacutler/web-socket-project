@@ -53,7 +53,9 @@ wss.on("connection", function (ws) {
         if (message.action === "pickup") {
             board[message.position[0]][message.position[1]] = ""
         }
-        console.log(message);
+        var current_player = ""
+        var turn = ""
+        console.log(message)
         sendActionToAllClients({
             action: "updateBoard",
             board: board,
