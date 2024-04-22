@@ -23,7 +23,9 @@ wss.on("connection", function (ws) {
     myClients.push(ws)
     sendActionToAllClients({
         action: "updateBoard",
-        board: board
+        board: board,
+        turn: "white",
+        currentPlayer: "player 1"
     })
     if (myClients.length > 2) {
         ws.close()
