@@ -63,7 +63,7 @@ Vue.createApp({
         }
     },
     created: function () {
-        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket = new WebSocket("wss://https://websocket-chess.onrender.com");
         this.socket.onmessage = (event) => {
             console.log("event player data:", event.data);
             this.receiveMessage(JSON.parse(event.data));
