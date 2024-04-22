@@ -7,7 +7,7 @@ var server = app.listen(8080, function () {
     console.log("Server is running...")
 })
 const wss = new WebSocket.WebSocketServer({server: server})
-var board = [["LBR", "LBK", "LBB", "BQ", "BK", "RBB", "RBK", "RBR"], ["BP1", "BP2", "BP3", "BP4", "BP5", "BP6", "BP7", "BP8"], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["WP1", "WP2", "WP3", "WP4", "WP5", "WP6", "WP7", "WP8"], ["LWR", "LWK", "LWB", "WQ", "BK", "RWB", "RWK", "RWR"]]
+var board = [["lbr.png", "lbk.png", "lbb.png", "bq.png", "bk.png", "rbb.png", "rbk.png", "rbr.png"], ["bp1.png", "bp2.png", "bp3.png", "bp4.png", "bp5.png", "bp6.png", "bp7.png", "bp8.png"], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["wp1.png", "wp2.png", "wp3.png", "wp4.png", "wp5.png", "wp6.png", "wp7.png", "wp8.png"], ["lwr.png", "lwk.png", "lwb.png", "wq.png", "wk.png", "rwb.png", "rwk.png", "rwr.png"]]
 function sendActionToAllClients(actionObject) {
     var message = JSON.stringify(actionObject)
     myClients.forEach(function (client) {

@@ -13,7 +13,11 @@
             <div class="container">
                 <div v-for="(row, rowIndex) in boardState" class="row">
                     <div v-for="(col, colIndex) in row">
-                        <button class="tile" v-on:click="move(rowIndex, colIndex)">{{col}}</button>
+                        <button class="tile" v-on:click="move(rowIndex, colIndex)">
+                            <div v-if="col!==''">
+                                <img v-bind:src="col" width="50px" height="50px">
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
