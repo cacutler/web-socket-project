@@ -23,10 +23,10 @@ Vue.createApp({
                 this.sendMessage(message);
                 if (this.white) {
                     this.turn = "black";
-                    this.current_player = "player 2";
+                    this.currentPlayer = "player 2";
                 } else {
                     this.turn = "white";
-                    this.current_player = "player 1";
+                    this.currentPlayer = "player 1";
                 }
             } else if (this.piece === "") {
                 var temp_board = JSON.parse(JSON.stringify(this.boardState));
