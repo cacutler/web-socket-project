@@ -13,6 +13,14 @@ Vue.createApp({
     methods: {
         move: function (row, col) {
             if (this.piece !== "") {
+                var message = {
+                    action: "move",
+                    position: [row, col],
+                    piece: this.piece
+                };
+                this.piece = "";
+                console.log("move message:", message);
+                this.sendMessage(message);
                 if (this.turn === "white") {
                     this.turn = "black";
                     this.currentPlayer = "player 2";
@@ -66,7 +74,7 @@ Vue.createApp({
         }
     },
     created: function () {
-        this.socket = new WebSocket("ws://localhost:8080");
+        this.socket = new WebSocket("wss://websocket-chess.onrender.com");
         this.socket.onmessage = (event) => {
             console.log("event player data:", event.data);
             this.receiveMessage(JSON.parse(event.data));
