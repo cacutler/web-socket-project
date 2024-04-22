@@ -23,9 +23,7 @@ wss.on("connection", function (ws) {
     myClients.push(ws)
     sendActionToAllClients({
         action: "updateBoard",
-        board: board,
-        turn: "white",
-        currentPlayer: "player 1"
+        board: board
     })
     if (myClients.length > 2) {
         ws.close()
@@ -53,14 +51,10 @@ wss.on("connection", function (ws) {
         if (message.action === "pickup") {
             board[message.position[0]][message.position[1]] = ""
         }
-        var current_player = ""
-        var turn = ""
         console.log(message)
         sendActionToAllClients({
             action: "updateBoard",
-            board: board,
-            currentPlayer: message.currentPlayer,
-            turn: message.turn
+            board: board
         })
     })
 })

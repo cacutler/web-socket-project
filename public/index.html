@@ -7,7 +7,9 @@
     <body>
         <div id="app">
             <h1>Chess</h1>
-            <h2>It is {{turn}}'s turn.</h2>
+            <div v-if="ableToPlay">
+                <h2>Both players are connected.</h2>
+            </div>
             <div class="container">
                 <div v-for="(row, rowIndex) in boardState" class="row">
                     <div v-for="(col, colIndex) in row">

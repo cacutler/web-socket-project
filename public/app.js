@@ -5,9 +5,8 @@ Vue.createApp({
             player: {turnType: ""},
             socket: null,
             piece: "",
-            turn: "white",
             players: [],
-            currentPlayer: "player 1"
+            ableToPlay: false
         };
     },
     methods: {
@@ -18,24 +17,7 @@ Vue.createApp({
                     position: [row, col],
                     piece: this.piece
                 };
-                this.piece = "";
-                console.log("move message:", message);
-                this.sendMessage(message);
-                if (this.turn === "white") {
-                    this.turn = "black";
-                    this.current_player = "player 2";
-                } else {
-                    this.turn = "white";
-                    this.current_player = "player 1";
-                }
-                var message = {
-                    action: "move",
-                    position: [row, col],
-                    piece: this.piece,
-                    player: this.currentPlayer,
-                    turn: this.turn
-                };
-                this.piece = "";
+                this.piece = "";    
                 console.log("move message:", message);
                 this.sendMessage(message);
             } else if (this.piece === "") {
@@ -56,21 +38,17 @@ Vue.createApp({
         },
         receiveMessage: function (data) {
             if (data.action === "updateBoard") {
-                console.log("updated board message:", data);
                 this.boardState = data.board;
-                this.currentPlayer = data.currentPlayer;
-                this.turn = data.turn;
             }
             if (data.action === "connect") {
-                console.log("connect message:", data);
                 if (data.connection_message === "player 1 connected") {
-                    this.players = data.players
+                    this.players = data.players;
                 }
                 if (data.connection_message === "player 2 connected") {
-                    this.players = data.players
+                    this.players = data.players;
+                    this.ableToPlay = true;
                 }
             }
-            console.log("players:", this.players);
         }
     },
     created: function () {
