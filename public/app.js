@@ -23,10 +23,10 @@ Vue.createApp({
                 this.sendMessage(message);
                 if (this.turn === "white") {
                     this.turn = "black";
-                    this.currentPlayer = "player 2";
+                    this.current_player = "player 2";
                 } else {
                     this.turn = "white";
-                    this.currentPlayer = "player 1";
+                    this.current_player = "player 1";
                 }
                 var message = {
                     action: "move",
