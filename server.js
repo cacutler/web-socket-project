@@ -55,7 +55,8 @@ wss.on("connection", function (ws) {
         sendActionToAllClients({
             action: "updateBoard",
             board: board,
-            current_player: message.current_player
+            currentPlayer: message.currentPlayer,
+            turn: message.turn
         })
     })
 })
