@@ -22,7 +22,6 @@ Vue.createApp({
                 this.statusMessage = "It is not your turn.";
                 return;
             }
-
             if (this.piece !== "") {
                 var message = {
                     action: "move",
@@ -84,9 +83,7 @@ Vue.createApp({
                     this.player.turnType = "b";
                 }
                 this.ableToPlay = this.players.length === 2;
-                this.statusMessage = this.ableToPlay
-                    ? (this.isMyTurn() ? "Your turn" : "Opponent's turn")
-                    : "Waiting for both players...";
+                this.statusMessage = this.ableToPlay ? (this.isMyTurn() ? "Your turn" : "Opponent's turn") : "Waiting for both players...";
             }
             if (data.action === "error") {
                 this.statusMessage = data.message || "Invalid move";

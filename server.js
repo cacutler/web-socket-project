@@ -10,7 +10,6 @@ const wss = new WebSocket.WebSocketServer({server: server})
 var board = [["lbr.png", "lbk.png", "lbb.png", "bq.png", "bk.png", "rbb.png", "rbk.png", "rbr.png"], ["bp1.png", "bp2.png", "bp3.png", "bp4.png", "bp5.png", "bp6.png", "bp7.png", "bp8.png"], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["", "", "", "", "", "", "", ""], ["wp1.png", "wp2.png", "wp3.png", "wp4.png", "wp5.png", "wp6.png", "wp7.png", "wp8.png"], ["lwr.png", "lwk.png", "lwb.png", "wq.png", "wk.png", "rwb.png", "rwk.png", "rwr.png"]]
 var currentTurn = "w"
 var players = new Map()
-
 function sendActionToAllClients(actionObject) {
     var message = JSON.stringify(actionObject)
     myClients.forEach(function (client) {
@@ -19,7 +18,6 @@ function sendActionToAllClients(actionObject) {
         }
     })
 }
-
 function isValidPosition(position) {
     return Array.isArray(position) &&
         position.length === 2 &&
@@ -28,14 +26,12 @@ function isValidPosition(position) {
         position[0] >= 0 && position[0] < 8 &&
         position[1] >= 0 && position[1] < 8
 }
-
 function pieceColor(piece) {
     if (typeof piece !== "string" || piece.length === 0) {
         return ""
     }
     return piece.charAt(0)
 }
-
 function sendError(ws, message) {
     if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({
@@ -45,7 +41,6 @@ function sendError(ws, message) {
         }))
     }
 }
-
 wss.on("connection", function (ws) {
     ws.on("error", function (error) {
         console.error("connection error:", error)
@@ -54,7 +49,6 @@ wss.on("connection", function (ws) {
         ws.close()
         return
     }
-
     myClients.add(ws)
     var occupiedNumbers = new Set(Array.from(players.values()).map(function (player) {
         return player.number
@@ -67,7 +61,6 @@ wss.on("connection", function (ws) {
         heldPiece: "",
         heldPosition: null
     })
-
     ws.on("close", function () {
         var departingPlayer = players.get(ws)
         if (departingPlayer && departingPlayer.heldPosition) {
@@ -92,14 +85,12 @@ wss.on("connection", function (ws) {
             turn: currentTurn
         })
     })
-
     ws.send(JSON.stringify({
         action: "updateBoard",
         board: board,
         currentTurn: currentTurn,
         turn: currentTurn
     }))
-
     if (playerNumber === 1) {
         ws.send(JSON.stringify({
             connection_message: "player 1 connected",
@@ -130,7 +121,6 @@ wss.on("connection", function (ws) {
             turn: currentTurn
         }))
     }
-
     ws.on("message", function (data, isBinary) {
         var message
         try {
@@ -139,13 +129,11 @@ wss.on("connection", function (ws) {
             sendError(ws, "Invalid message")
             return
         }
-
         var player = players.get(ws)
         if (!player) {
             sendError(ws, "Player is not connected")
             return
         }
-
         if (message.action === "move") {
             if (pieceColor(player.heldPiece) !== currentTurn) {
                 sendError(ws, "It is not your turn")
@@ -159,7 +147,6 @@ wss.on("connection", function (ws) {
                 sendError(ws, "Invalid move")
                 return
             }
-
             var row = message.position[0]
             var col = message.position[1]
             var destination = board[row][col]
@@ -167,14 +154,12 @@ wss.on("connection", function (ws) {
                 sendError(ws, "You cannot move onto your own piece")
                 return
             }
-
             board[row][col] = player.heldPiece
             board[player.heldPosition[0]][player.heldPosition[1]] = ""
             player.heldPiece = ""
             player.heldPosition = null
             currentTurn = currentTurn === "w" ? "b" : "w"
         }
-
         if (message.action === "pickup") {
             if (player.color !== currentTurn) {
                 sendError(ws, "It is not your turn")
@@ -184,7 +169,6 @@ wss.on("connection", function (ws) {
                 sendError(ws, "Invalid position")
                 return
             }
-
             var pickupRow = message.position[0]
             var pickupCol = message.position[1]
             var piece = board[pickupRow][pickupCol]
@@ -192,12 +176,10 @@ wss.on("connection", function (ws) {
                 sendError(ws, "You can only pick up your own pieces")
                 return
             }
-
             player.heldPiece = piece
             player.heldPosition = [pickupRow, pickupCol]
             board[pickupRow][pickupCol] = ""
         }
-
         sendActionToAllClients({
             action: "updateBoard",
             board: board,
