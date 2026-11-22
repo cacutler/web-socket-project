@@ -10,7 +10,7 @@
             <div v-if="ableToPlay">
                 <h2>Both players are connected.</h2>
             </div>
-            <h2>{{ statusMessage }}</h2>
+            <h2>{{statusMessage}}</h2>
             <div class="container">
                 <div v-for="(row, rowIndex) in boardState" class="row">
                     <div v-for="(col, colIndex) in row">
